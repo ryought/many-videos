@@ -2,9 +2,9 @@
   "name": "many-videos",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "main.js",
   "scripts": {
-    "dev": "electron --js-flags='--max-old-space-size=5000' ./src/",
+    "start": "electron --js-flags='--max-old-space-size=5000' .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
