@@ -1,8 +1,25 @@
 console.log('renderer')
 
+const randomSeekInterval = 500;
+
 const root = document.getElementById('root');
 
-function setUpVideo(key) {
+function getRandomTimePoint(duration) {
+  return Math.random() * duration
+}
+
+function startRandomSeeker(key) {
+  const video = document.getElementById('video' + key);
+  setInterval(() => {
+    if (video.duration) {
+      const time = getRandomTimePoint(video.duration);
+      console.log('seek requesting', time);
+      video.currentTime = time;
+    }
+  }, randomSeekInterval);
+}
+
+function setUpVideoElement(key) {
   const elem = document.createElement('elem');
   elem.classList.add('elem');
   const video = document.createElement('video');
@@ -10,7 +27,6 @@ function setUpVideo(key) {
   video.setAttribute('controls', true);
   const span = document.createElement('span');
   span.id = 'status' + key;
-  span.innerText = '00:00';
 
   elem.appendChild(span);
   elem.appendChild(video);
@@ -44,27 +60,31 @@ function setUpVideo(key) {
   root.appendChild(elem);
 }
 
+function loadVideo(key) {
+  return window.electronApi.getLocalFileContent(videoPaths[key])
+    .then((buffer) => {
+      console.log('mp4 loaded!', buffer);
+      const video = document.getElementById('video' + key);
+      const url = URL.createObjectURL(new Blob([buffer]));
+      video.src = url;
+      video.load();
+      video.play();
+    });
+}
+
 const videoPaths = [
+  '/Users/ryought/mep-terminal/data/playlist/6035aabb80b6631127953a7b/free-play/20211108_164336/raw/movie.mp4',
+  '/Users/ryought/mep-terminal/data/playlist/6035aabb80b6631127953a7b/free-play/20211108_164336/raw/movie.mp4',
   '/Users/ryought/mep-terminal/data/playlist/6035aabb80b6631127953a7b/free-play/20211108_164336/raw/movie.mp4',
 ];
 const videoCount = videoPaths.length;
 
 function setUpAllVideos() {
   for (let key = 0; key < videoCount; key++) {
-    setUpVideo(key);
+    setUpVideoElement(key);
+    loadVideo(key)
+      .then(() => startRandomSeeker(key));
   }
 }
 
 setUpAllVideos();
-
-window.electronApi.getLocalFileContent(videoPaths[0])
-  .then((buffer) => {
-    console.log('mp4 loaded!', buffer);
-    for (let key = 0; key < videoCount; key++) {
-      const video = document.getElementById('video' + key);
-      const url = URL.createObjectURL(new Blob([buffer]));
-      video.src = url;
-      video.load();
-      video.play();
-    }
-  });
