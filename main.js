@@ -4,7 +4,7 @@ const path = require('path')
 
 ipcMain.handle('getLocalFileContent', (event, arg) => {
   console.log('ipcMain hoge')
-  // fs.readFile()
+  return fs.readFile(arg)
 })
 
 const createWindow = () => {

@@ -2,14 +2,26 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <title>Hello World!</title>
+    <style type="text/css">
+    .wrapper {
+      display: flex;
+    }
+    .elem {
+      flex: 1 1 auto;
+    }
+    video {
+      width: 100%;
+    }
+    </style>
   </head>
   <body>
     <h1>Many-Video test</h1>
-    <video></video>
+    <div class="wrapper">
+      <div class="elem"><video id="video1"></video></div>
+      <div class="elem"><video id="video2"></video></div>
+      <div class="elem"><video id="video3"></video></div>
+    </div>
     <script src="./renderer.js"></script>
   </body>
 </html>
